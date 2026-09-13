@@ -1,100 +1,83 @@
 import Link from "next/link";
+import { ArrowUpRight, Sparkles } from "lucide-react";
+import { db } from "@/lib/db";
 import { LeadStatusBadge } from "./lead-status-badge";
 
-const recentLeads = [
-    {
-        id: "lead-001",
-        name: "John Smith",
-        company: "TechVision",
-        email: "john@techvision.com",
-        score: 92,
-        status: "Qualified" as const,
-    },
-    {
-        id: "lead-002",
-        name: "Sarah Johnson",
-        company: "GrowthLabs",
-        email: "sarah@growthlabs.com",
-        score: 84,
-        status: "Contacted" as const,
-    },
-    {
-        id: "lead-003",
-        name: "Michael Brown",
-        company: "CloudWorks",
-        email: "michael@cloudworks.com",
-        score: 76,
-        status: "New" as const,
-    },
-    {
-        id: "lead-004",
-        name: "Emily Davis",
-        company: "DigitalFlow",
-        email: "emily@digitalflow.com",
-        score: 95,
-        status: "Converted" as const,
-    },
-];
-
 export function RecentLeads() {
-    return (
-        <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                <div>
-                    <h2 className="font-semibold text-slate-900">Recent Leads</h2>
-                    <p className="mt-1 text-xs text-slate-500">
-                        Recently added prospects
+  const leads = db.getLeads().slice(0, 5);
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex items-center justify-between border-b border-slate-200/80 px-6 py-4 dark:border-slate-800">
+        <div>
+          <h2 className="text-sm font-bold text-slate-900 dark:text-white">
+            Recent Prospects
+          </h2>
+          <p className="mt-0.5 text-xs text-slate-400">
+            Latest leads scored by n8n workflow
+          </p>
+        </div>
+
+        <Link
+          href="/dashboard/leads"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          View all
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+
+      <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
+        {leads.length === 0 ? (
+          <div className="p-8 text-center text-sm text-slate-400">
+            No leads captured yet. Click &quot;Add Lead&quot; to begin.
+          </div>
+        ) : (
+          leads.map((lead) => {
+            const initials = lead.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .substring(0, 2);
+
+            return (
+              <Link
+                key={lead.id}
+                href={`/dashboard/leads/${lead.id}`}
+                className="group flex items-center justify-between gap-4 px-6 py-3.5 transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
+              >
+                <div className="flex min-w-0 items-center gap-3.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xs font-bold text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
+                    {initials}
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+                      {lead.name}
                     </p>
+                    <p className="truncate text-xs text-slate-400">
+                      {lead.company} · {lead.source}
+                    </p>
+                  </div>
                 </div>
 
-                <Link
-                    href="/dashboard/leads"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                    View all
-                </Link>
-            </div>
+                <div className="flex items-center gap-4">
+                  {/* Score pill */}
+                  <div className="flex items-center gap-1 text-xs font-bold text-slate-900 dark:text-white">
+                    <Sparkles className="h-3 w-3 text-blue-500" />
+                    <span>{lead.score}</span>
+                    <span className="text-[10px] font-normal text-slate-400">
+                      /100
+                    </span>
+                  </div>
 
-            <div className="divide-y divide-slate-100">
-                {recentLeads.map((lead) => (
-                    <Link
-                        key={lead.id}
-                        href={`/dashboard/leads/${lead.id}`}
-                        className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-slate-50"
-                    >
-                        <div className="flex min-w-0 items-center gap-3">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-600">
-                                {lead.name
-                                    .split(" ")
-                                    .map((name) => name[0])
-                                    .join("")}
-                            </div>
-
-                            <div className="min-w-0">
-                                <p className="truncate text-sm font-medium text-slate-900">
-                                    {lead.name}
-                                </p>
-
-                                <p className="truncate text-xs text-slate-500">
-                                    {lead.company}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="hidden items-center gap-4 sm:flex">
-                            <div className="text-right">
-                                <p className="text-xs text-slate-400">AI Score</p>
-
-                                <p className="font-semibold text-slate-900">
-                                    {lead.score}
-                                </p>
-                            </div>
-
-                            <LeadStatusBadge status={lead.status} />
-                        </div>
-                    </Link>
-                ))}
-            </div>
-        </div>
-    );
+                  <LeadStatusBadge status={lead.status} size="sm" />
+                </div>
+              </Link>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 }
