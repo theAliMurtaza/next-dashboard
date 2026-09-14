@@ -14,8 +14,8 @@ import {
 import { db } from "@/lib/db";
 import { N8nSettingsForm } from "./n8n-settings-form";
 
-export default function SettingsPage() {
-  const n8nConfig = db.getN8nConfig();
+export default async function SettingsPage() {
+  const n8nConfig = await db.getN8nConfig();
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">

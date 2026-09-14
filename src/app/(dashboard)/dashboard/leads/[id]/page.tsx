@@ -29,7 +29,7 @@ export default async function LeadDetailsPage({ params }: LeadPageProps) {
     notFound();
   }
 
-  const lead = db.getLeadById(id);
+  const lead = await db.getLeadById(id);
 
   if (!lead) {
     return (

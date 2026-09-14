@@ -27,7 +27,11 @@ export default async function CustomerDetailsPage({
     notFound();
   }
 
-  const customer = db.getCustomerById(id) || db.getCustomers()[0];
+  const customer = await db.getCustomerById(id);
+
+  if (!customer) {
+    notFound();
+  }
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">

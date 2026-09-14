@@ -91,10 +91,10 @@ export function N8nSettingsForm({ initialConfig }: N8nSettingsFormProps) {
           message: `Webhook test returned HTTP ${res.status}`,
         });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setFeedback({
         type: "error",
-        message: `Connection test failed: ${err.message}`,
+        message: `Connection test failed: ${err instanceof Error ? err.message : "Unknown error"}`,
       });
     } finally {
       setIsTesting(false);

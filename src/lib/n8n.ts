@@ -21,9 +21,17 @@ interface NotificationPayload {
   type: string;
 }
 
+interface N8nConnection {
+  webhookUrl?: string;
+  webhookSecret?: string;
+}
+
 /** Base helper: POST JSON to n8n webhook */
-async function postToN8n(payload: Record<string, unknown>): Promise<Response> {
-  const webhookUrl = process.env.N8N_WEBHOOK_URL;
+async function postToN8n(
+  payload: Record<string, unknown>,
+  connection?: N8nConnection
+): Promise<Response> {
+  const webhookUrl = connection?.webhookUrl || process.env.N8N_WEBHOOK_URL;
   if (!webhookUrl) {
     throw new Error("N8N_WEBHOOK_URL environment variable is not configured.");
   }
@@ -32,8 +40,8 @@ async function postToN8n(payload: Record<string, unknown>): Promise<Response> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(process.env.N8N_WEBHOOK_SECRET
-        ? { "x-webhook-secret": process.env.N8N_WEBHOOK_SECRET }
+      ...(connection?.webhookSecret || process.env.N8N_WEBHOOK_SECRET
+        ? { "x-opspilot-secret": connection?.webhookSecret || process.env.N8N_WEBHOOK_SECRET! }
         : {}),
     },
     body: JSON.stringify(payload),
@@ -45,7 +53,10 @@ async function postToN8n(payload: Record<string, unknown>): Promise<Response> {
  * Returns a scoring result; falls back to a local heuristic if the webhook
  * is not reachable (dev / staging environments without a live n8n instance).
  */
-export async function triggerN8nLeadScoring(lead: Lead): Promise<ScoringResult> {
+export async function triggerN8nLeadScoring(
+  lead: Lead,
+  connection?: N8nConnection
+): Promise<ScoringResult> {
   try {
     const response = await postToN8n({
       event: "lead.score",
@@ -56,7 +67,7 @@ export async function triggerN8nLeadScoring(lead: Lead): Promise<ScoringResult> 
       source: lead.source,
       estimatedValue: lead.estimatedValue,
       notes: lead.notes,
-    });
+    }, connection);
 
     if (response.ok) {
       const data = await response.json();

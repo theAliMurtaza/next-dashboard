@@ -5,7 +5,7 @@ import { CURRENT_USER, User } from "@/models/user.model";
 export async function getCurrentUser(): Promise<User | null> {
   const userId = await getSessionUserId();
   if (!userId) return null;
-  return db.getPublicUserById(userId) ?? null;
+  return (await db.getPublicUserById(userId)) ?? null;
 }
 
 export async function isAuthenticated(): Promise<boolean> {

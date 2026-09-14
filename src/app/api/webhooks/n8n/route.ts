@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const config = db.getN8nConfig();
+    const config = await db.getN8nConfig();
 
     const incomingSecret = request.headers.get("x-opspilot-secret");
-    if (config.webhookSecret && incomingSecret && incomingSecret !== config.webhookSecret) {
+    if (config.webhookSecret && incomingSecret !== config.webhookSecret) {
       return NextResponse.json(
         {
           success: false,
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
     if (event === "lead.scored" || (leadId && typeof score === "number")) {
       const targetId = leadId || body.id;
       if (targetId) {
-        db.updateLead(targetId, {
+        await db.updateLead(targetId, {
           score: Math.min(100, Math.max(0, Math.round(score))),
           priority: priority || (score >= 80 ? "High" : score >= 60 ? "Medium" : "Low"),
           scoringRationale: rationale || "Evaluated by external n8n AI workflow.",
@@ -34,11 +35,11 @@ export async function POST(request: NextRequest) {
         });
       }
     } else if (event === "lead.create" && lead) {
-      db.createLead(lead);
+      await db.createLead(lead);
     } else if (event === "task.create" && task) {
-      db.createTask(task);
+      await db.createTask(task);
     } else if (event === "ping") {
-      db.addActivity({
+      await db.addActivity({
         title: "n8n Webhook Ping",
         description: "Webhook connection test verified successfully.",
         iconType: "automation",

@@ -1,10 +1,12 @@
 "use server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { triggerN8nLeadScoring, triggerN8nNotification } from "@/lib/n8n";
 import { validateLeadInput } from "@/lib/validations/lead";
 import { LeadSource, LeadStatus } from "@/types/lead";
+import { getSessionUserId } from "@/lib/session";
 
 export interface ActionResult<T = any> {
   success: boolean;
@@ -13,8 +15,15 @@ export interface ActionResult<T = any> {
   errors?: Record<string, string>;
 }
 
+async function ensureAuthenticated(): Promise<void> {
+  if (!(await getSessionUserId())) {
+    throw new Error("You must be signed in to perform this action.");
+  }
+}
+
 export async function createLeadAction(formData: FormData): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const rawData = {
       name: (formData.get("name") as string) || "",
       email: (formData.get("email") as string) || "",
@@ -23,7 +32,7 @@ export async function createLeadAction(formData: FormData): Promise<ActionResult
       source: (formData.get("source") as LeadSource) || "Website",
       status: (formData.get("status") as LeadStatus) || "New",
       notes: (formData.get("notes") as string) || "",
-      estimatedValue: Number(formData.get("estimatedValue")) || 15000,
+      estimatedValue: Number(formData.get("estimatedValue") || 15000),
     };
 
     const validation = validateLeadInput(rawData);
@@ -70,9 +79,12 @@ export async function createLeadAction(formData: FormData): Promise<ActionResult
     // write (e.g. a Mongo change stream, or n8n polling), so the
     // Next.js request/response cycle isn't responsible for keeping the
     // scoring job alive at all.
-    triggerLeadScoringInBackground(createdLead.id).catch((err) => {
-      console.error("Background lead scoring failed:", err);
-    });
+    const config = await db.getN8nConfig();
+    if (config.autoScoreOnCreate) {
+      triggerLeadScoringInBackground(createdLead.id, config).catch((err) => {
+        console.error("Background lead scoring failed:", err);
+      });
+    }
 
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/leads");
@@ -80,7 +92,9 @@ export async function createLeadAction(formData: FormData): Promise<ActionResult
 
     return {
       success: true,
-      message: "Lead created successfully! AI scoring is running in the background.",
+      message: config.autoScoreOnCreate
+        ? "Lead created successfully! AI scoring is running in the background."
+        : "Lead created successfully.",
       data: createdLead,
     };
   } catch (error: any) {
@@ -92,11 +106,14 @@ export async function createLeadAction(formData: FormData): Promise<ActionResult
   }
 }
 
-async function triggerLeadScoringInBackground(leadId: string) {
+async function triggerLeadScoringInBackground(
+  leadId: string,
+  connection?: { webhookUrl?: string; webhookSecret?: string; alertOnHighPriority?: boolean }
+) {
   const lead = await db.getLeadById(leadId);
   if (!lead) return;
 
-  const scoringResult = await triggerN8nLeadScoring(lead);
+  const scoringResult = await triggerN8nLeadScoring(lead, connection);
 
   await db.updateLead(leadId, {
     score: scoringResult.score,
@@ -106,7 +123,7 @@ async function triggerLeadScoringInBackground(leadId: string) {
     status: scoringResult.score >= 80 ? "Qualified" : lead.status,
   });
 
-  if (scoringResult.score >= 80) {
+  if (scoringResult.score >= 80 && connection?.alertOnHighPriority !== false) {
     await triggerN8nNotification({
       title: `High Priority Lead Alert: ${lead.name}`,
       message: `${lead.name} from ${lead.company} scored ${scoringResult.score}/100. Potential value: $${lead.estimatedValue?.toLocaleString()}`,
@@ -120,6 +137,7 @@ export async function updateLeadStatusAction(
   newStatus: LeadStatus
 ): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const updated = await db.updateLead(leadId, { status: newStatus });
     if (!updated) {
       return { success: false, message: "Lead not found" };
@@ -141,12 +159,13 @@ export async function updateLeadStatusAction(
 
 export async function rescoreLeadAction(leadId: string): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const lead = await db.getLeadById(leadId);
     if (!lead) {
       return { success: false, message: "Lead not found" };
     }
 
-    const scoringResult = await triggerN8nLeadScoring(lead);
+    const scoringResult = await triggerN8nLeadScoring(lead, await db.getN8nConfig());
 
     const updated = await db.updateLead(leadId, {
       score: scoringResult.score,
@@ -171,6 +190,7 @@ export async function rescoreLeadAction(leadId: string): Promise<ActionResult> {
 
 export async function deleteLeadAction(leadId: string): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const deleted = await db.deleteLead(leadId);
     if (!deleted) {
       return { success: false, message: "Lead not found or already deleted" };
@@ -187,6 +207,7 @@ export async function deleteLeadAction(leadId: string): Promise<ActionResult> {
 
 export async function toggleTaskAction(taskId: string, completed: boolean): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const updated = await db.updateTask(taskId, { completed });
     if (!updated) {
       return { success: false, message: "Task not found" };
@@ -202,11 +223,13 @@ export async function toggleTaskAction(taskId: string, completed: boolean): Prom
 }
 
 export async function getTasksAction() {
+  await ensureAuthenticated();
   return db.getTasks();
 }
 
 export async function updateN8nConfigAction(formData: FormData): Promise<ActionResult> {
   try {
+    await ensureAuthenticated();
     const webhookUrl = (formData.get("webhookUrl") as string) || "";
     const webhookSecret = (formData.get("webhookSecret") as string) || "";
     const autoScoreOnCreate = formData.get("autoScoreOnCreate") === "true";

@@ -3,7 +3,7 @@ import { LeadsTable } from "@/components/leads/leads-table";
 
 export const dynamic = "force-dynamic";
 
-export default function LeadsPage() {
-  const leads = db.getLeads();
+export default async function LeadsPage() {
+  const leads = await db.getLeads();
   return <LeadsTable leads={leads} />;
 }

@@ -3,7 +3,7 @@ export const authConfig = {
     signIn: "/login",
   },
   callbacks: {
-    authorized({ auth }: { auth?: any }) {
+    authorized({ auth }: { auth?: { user?: unknown } }) {
       return !!auth?.user;
     },
   },

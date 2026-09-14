@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { logoutAction } from "@/actions/auth.actions";
+import type { User } from "@/models/user.model";
 import {
   BarChart3,
   CheckSquare,
@@ -56,9 +58,10 @@ const secondaryNavigation = [
 interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
+  user: User;
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, onClose, user }: SidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -214,25 +217,28 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex items-center justify-between rounded-xl bg-slate-50/80 p-2.5 dark:bg-slate-800/60">
             <div className="flex min-w-0 items-center gap-2.5">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-xs font-bold text-white shadow-xs">
-                AM
+                {user.initials}
               </div>
               <div className="min-w-0">
                 <p className="truncate text-xs font-semibold text-slate-900 dark:text-white">
-                  Alex Morgan
+                  {user.name}
                 </p>
                 <p className="truncate text-[11px] text-slate-500 dark:text-slate-400">
-                  admin@opspilot.dev
+                  {user.email}
                 </p>
               </div>
             </div>
 
-            <Link
-              href="/login"
+            <form action={logoutAction}>
+              <button
+                type="submit"
               title="Logout"
               className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-200/60 hover:text-slate-700 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              aria-label="Log out"
             >
               <LogOut className="h-4 w-4" />
-            </Link>
+              </button>
+            </form>
           </div>
         </div>
       </aside>

@@ -1,4 +1,5 @@
 import "server-only";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "./mongodb";
 import {
   LeadModel,

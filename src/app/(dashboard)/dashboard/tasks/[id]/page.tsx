@@ -23,7 +23,11 @@ export default async function TaskDetailsPage({ params }: TaskPageProps) {
     notFound();
   }
 
-  const task = db.getTaskById(id) || db.getTasks()[0];
+  const task = await db.getTaskById(id);
+
+  if (!task) {
+    notFound();
+  }
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">

@@ -35,8 +35,8 @@ export function LoginForm() {
           name="email"
           type="email"
           required
-          defaultValue="admin@opspilot.dev"
-          placeholder="admin@opspilot.dev"
+          autoComplete="email"
+          placeholder="you@company.com"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
       </div>
@@ -58,7 +58,7 @@ export function LoginForm() {
           name="password"
           type="password"
           required
-          defaultValue="password123"
+          autoComplete="current-password"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
       </div>

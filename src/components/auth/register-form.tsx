@@ -34,6 +34,7 @@ export function RegisterForm() {
           name="name"
           type="text"
           required
+          autoComplete="name"
           placeholder="e.g. Jane Doe"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
@@ -48,6 +49,7 @@ export function RegisterForm() {
           name="email"
           type="email"
           required
+          autoComplete="email"
           placeholder="jane@company.com"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
@@ -63,6 +65,7 @@ export function RegisterForm() {
           type="password"
           required
           minLength={6}
+          autoComplete="new-password"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
       </div>

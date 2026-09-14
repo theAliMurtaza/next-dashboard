@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function GET() {
-  const n8nConfig = db.getN8nConfig();
+  const n8nConfig = await db.getN8nConfig();
 
   return NextResponse.json({
     status: "healthy",

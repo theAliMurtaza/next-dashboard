@@ -18,7 +18,7 @@ interface MongooseCache {
 // on every serverless invocation / hot reload. This is the standard
 // pattern recommended for Mongoose + Next.js on serverless platforms.
 declare global {
-  // eslint-disable-next-line no-var
+
   var __opspilot_mongoose_cache__: MongooseCache | undefined;
 }
 

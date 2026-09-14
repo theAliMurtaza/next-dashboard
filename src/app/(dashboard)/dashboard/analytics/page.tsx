@@ -55,8 +55,8 @@ const workflows = [
   },
 ];
 
-export default function AnalyticsPage() {
-  const n8nConfig = db.getN8nConfig();
+export default async function AnalyticsPage() {
+  const n8nConfig = await db.getN8nConfig();
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">

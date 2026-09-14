@@ -1,21 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/lib/auth-constants";
+import { readSessionToken } from "@/lib/session-token";
 
-export function middleware(request: NextRequest) {
-  const session = request.cookies.get(SESSION_COOKIE)?.value;
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const hasValidSession = Boolean(
+    readSessionToken(request.cookies.get(SESSION_COOKIE)?.value ?? "")
+  );
   const isDashboard = pathname.startsWith("/dashboard");
-  const isAuthPage =
-    pathname === "/login" || pathname === "/register" || pathname === "/forget-password";
+  const isAuthPage = ["/login", "/register", "/forget-password"].includes(pathname);
 
-  if (isDashboard && !session) {
+  if (isDashboard && !hasValidSession) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthPage && session) {
+  if (isAuthPage && hasValidSession) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

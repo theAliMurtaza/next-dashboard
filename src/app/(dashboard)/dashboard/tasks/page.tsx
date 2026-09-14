@@ -1,4 +1,4 @@
-import { TasksList } from "./tasks-list";
+import { TasksList } from "./task-list";
 import { getTasksAction } from "@/actions/lead.actions";
 
 export default async function TasksPage() {
