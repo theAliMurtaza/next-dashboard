@@ -7,8 +7,8 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/db";
 
-export function RecentActivity() {
-  const activities = db.getActivities().slice(0, 5);
+export async function RecentActivity() {
+  const activities = (await db.getActivities()).slice(0, 5);
 
   const getIcon = (type: string) => {
     switch (type) {

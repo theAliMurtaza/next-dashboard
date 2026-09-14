@@ -1,0 +1,374 @@
+{
+  "leads": [
+    {
+      "id": "lead-mu0vfor8",
+      "name": "Ali Murtaza",
+      "company": "Development",
+      "email": "alimurtaza9468369@gmail.com",
+      "phone": "+923099468369",
+      "source": "LinkedIn",
+      "status": "New",
+      "score": 57,
+      "priority": "Medium",
+      "estimatedValue": 15000,
+      "createdAt": "2026-09-14T06:38:00.212Z",
+      "updatedAt": "2026-09-14T06:38:07.545Z",
+      "scoredAt": "2026-09-14T06:38:07.544Z",
+      "scoringRationale": "Local heuristic score based on estimated value ($15,000) and lead source (LinkedIn).",
+      "tags": [
+        "Inbound"
+      ]
+    },
+    {
+      "id": "lead-001",
+      "name": "John Smith",
+      "company": "TechVision",
+      "email": "john@techvision.com",
+      "phone": "+1 (555) 123-4567",
+      "source": "Website",
+      "status": "Qualified",
+      "score": 92,
+      "priority": "High",
+      "notes": "Interested in AI-driven CRM automation workflows. Requested a customized product demo for 50+ seats.",
+      "estimatedValue": 48000,
+      "createdAt": "2026-09-10T10:30:00.000Z",
+      "updatedAt": "2026-09-12T14:20:00.000Z",
+      "scoredAt": "2026-09-10T10:32:15.000Z",
+      "scoringRationale": "Enterprise budget confirmed. Immediate implementation timeline and executive decision-maker contact.",
+      "tags": [
+        "Enterprise",
+        "AI Pipeline",
+        "Hot"
+      ]
+    },
+    {
+      "id": "lead-002",
+      "name": "Sarah Johnson",
+      "company": "GrowthLabs",
+      "email": "sarah@growthlabs.com",
+      "phone": "+1 (555) 234-5678",
+      "source": "LinkedIn",
+      "status": "Contacted",
+      "score": 84,
+      "priority": "High",
+      "notes": "Followed up regarding n8n webhook connectors. Waiting on security team compliance sign-off.",
+      "estimatedValue": 24000,
+      "createdAt": "2026-09-11T09:15:00.000Z",
+      "updatedAt": "2026-09-12T16:45:00.000Z",
+      "scoredAt": "2026-09-11T09:16:30.000Z",
+      "scoringRationale": "High website interaction and strong domain authority. Fast-growing agency profile.",
+      "tags": [
+        "Agency",
+        "Mid-Market"
+      ]
+    },
+    {
+      "id": "lead-003",
+      "name": "Michael Brown",
+      "company": "CloudWorks",
+      "email": "michael@cloudworks.com",
+      "phone": "+1 (555) 345-6789",
+      "source": "Referral",
+      "status": "New",
+      "score": 76,
+      "priority": "Medium",
+      "notes": "Referred by existing partner DigitalFlow. Inquiring about custom webhook event transformers.",
+      "estimatedValue": 18500,
+      "createdAt": "2026-09-12T11:00:00.000Z",
+      "updatedAt": "2026-09-12T11:00:00.000Z",
+      "scoredAt": "2026-09-12T11:01:00.000Z",
+      "scoringRationale": "Warm referral with defined use-case. Moderate team scale.",
+      "tags": [
+        "Referral",
+        "DevOps"
+      ]
+    },
+    {
+      "id": "lead-004",
+      "name": "Emily Davis",
+      "company": "DigitalFlow",
+      "email": "emily@digitalflow.com",
+      "phone": "+1 (555) 456-7890",
+      "source": "Website",
+      "status": "Converted",
+      "score": 95,
+      "priority": "Critical",
+      "notes": "Contract executed. Onboarding initiated for operations analytics suite.",
+      "estimatedValue": 65000,
+      "createdAt": "2026-09-08T08:00:00.000Z",
+      "updatedAt": "2026-09-13T08:30:00.000Z",
+      "scoredAt": "2026-09-08T08:02:10.000Z",
+      "scoringRationale": "Top-tier budget allocation, high urgency, verified creditworthiness.",
+      "tags": [
+        "VIP",
+        "Closed-Won"
+      ]
+    },
+    {
+      "id": "lead-005",
+      "name": "David Wilson",
+      "company": "ScaleUp",
+      "email": "david@scaleup.com",
+      "phone": "+1 (555) 567-8901",
+      "source": "Email",
+      "status": "New",
+      "score": 68,
+      "priority": "Medium",
+      "notes": "Responded to Q3 cold email outreach. Requested pricing tiers.",
+      "estimatedValue": 12000,
+      "createdAt": "2026-09-13T06:45:00.000Z",
+      "updatedAt": "2026-09-13T06:45:00.000Z",
+      "scoredAt": "2026-09-13T06:46:20.000Z",
+      "scoringRationale": "Early stage prospect exploring market alternatives.",
+      "tags": [
+        "Outbound",
+        "SaaS"
+      ]
+    },
+    {
+      "id": "lead-006",
+      "name": "Elena Rostova",
+      "company": "Apex Dynamics",
+      "email": "elena@apexdynamics.io",
+      "phone": "+1 (555) 678-9012",
+      "source": "LinkedIn",
+      "status": "Qualified",
+      "score": 89,
+      "priority": "High",
+      "notes": "COO looking to automate lead intake into internal ERP via n8n.",
+      "estimatedValue": 38000,
+      "createdAt": "2026-09-13T07:15:00.000Z",
+      "updatedAt": "2026-09-13T09:10:00.000Z",
+      "scoredAt": "2026-09-13T07:16:00.000Z",
+      "scoringRationale": "C-Level prospect with clear ROI requirement and technical competency.",
+      "tags": [
+        "Operations",
+        "Inbound"
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-001",
+      "name": "TechVision",
+      "company": "TechVision Inc.",
+      "contact": "John Smith",
+      "email": "john@techvision.com",
+      "phone": "+1 (555) 123-4567",
+      "status": "Active",
+      "value": "$24,500",
+      "rawNumericValue": 24500,
+      "projectsCount": 8,
+      "sinceYear": "2025",
+      "createdAt": "2025-06-15T00:00:00.000Z"
+    },
+    {
+      "id": "cust-002",
+      "name": "GrowthLabs",
+      "company": "GrowthLabs Media",
+      "contact": "Sarah Johnson",
+      "email": "sarah@growthlabs.com",
+      "phone": "+1 (555) 234-5678",
+      "status": "Active",
+      "value": "$18,200",
+      "rawNumericValue": 18200,
+      "projectsCount": 5,
+      "sinceYear": "2025",
+      "createdAt": "2025-09-10T00:00:00.000Z"
+    },
+    {
+      "id": "cust-003",
+      "name": "DigitalFlow",
+      "company": "DigitalFlow Systems",
+      "contact": "Emily Davis",
+      "email": "emily@digitalflow.com",
+      "phone": "+1 (555) 456-7890",
+      "status": "Active",
+      "value": "$32,800",
+      "rawNumericValue": 32800,
+      "projectsCount": 12,
+      "sinceYear": "2024",
+      "createdAt": "2024-11-20T00:00:00.000Z"
+    },
+    {
+      "id": "cust-004",
+      "name": "CloudWorks",
+      "company": "CloudWorks Global",
+      "contact": "Michael Brown",
+      "email": "michael@cloudworks.com",
+      "phone": "+1 (555) 345-6789",
+      "status": "Pending",
+      "value": "$9,600",
+      "rawNumericValue": 9600,
+      "projectsCount": 2,
+      "sinceYear": "2026",
+      "createdAt": "2026-01-14T00:00:00.000Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Follow up with John Smith",
+      "description": "Contact the lead and schedule technical review of n8n webhook pipeline.",
+      "lead": "TechVision",
+      "leadId": "lead-001",
+      "priority": "High",
+      "due": "Today",
+      "completed": false,
+      "assignedTo": "Alex Morgan",
+      "createdAt": "2026-09-12T10:00:00.000Z"
+    },
+    {
+      "id": "task-002",
+      "title": "Send proposal to GrowthLabs",
+      "description": "Prepare customized pricing tier for multi-node n8n orchestrator.",
+      "lead": "GrowthLabs",
+      "leadId": "lead-002",
+      "priority": "High",
+      "due": "Today",
+      "completed": false,
+      "assignedTo": "Alex Morgan",
+      "createdAt": "2026-09-12T11:30:00.000Z"
+    },
+    {
+      "id": "task-003",
+      "title": "Schedule CloudWorks demo",
+      "description": "Showcase automated lead scoring and webhook fallback triggers.",
+      "lead": "CloudWorks",
+      "leadId": "lead-003",
+      "priority": "Medium",
+      "due": "Tomorrow",
+      "completed": false,
+      "assignedTo": "Sarah Sales",
+      "createdAt": "2026-09-13T07:00:00.000Z"
+    },
+    {
+      "id": "task-004",
+      "title": "Update DigitalFlow account",
+      "description": "Sync Q3 usage metrics and renew yearly enterprise service license.",
+      "lead": "DigitalFlow",
+      "leadId": "lead-004",
+      "priority": "Low",
+      "due": "Sep 15",
+      "completed": true,
+      "assignedTo": "Alex Morgan",
+      "createdAt": "2026-09-10T14:00:00.000Z"
+    },
+    {
+      "id": "task-005",
+      "title": "Verify n8n webhook retry telemetry",
+      "description": "Ensure dead-letter queues in n8n are forwarding failed execution alerts.",
+      "lead": "Ops Automation",
+      "priority": "Medium",
+      "due": "Sep 16",
+      "completed": false,
+      "assignedTo": "DevOps Lead",
+      "createdAt": "2026-09-13T08:00:00.000Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act-mu0vfuex",
+      "title": "AI Score recomputed",
+      "description": "Ali Murtaza scored 57/100 via n8n automation",
+      "time": "Just now",
+      "iconType": "score"
+    },
+    {
+      "id": "act-mu0vfor8",
+      "title": "New lead created",
+      "description": "Ali Murtaza from Development (LinkedIn)",
+      "time": "Just now",
+      "iconType": "lead"
+    },
+    {
+      "id": "act-mu0unkzl",
+      "title": "New user registered",
+      "description": "Ali Murtaza (alimurtaza9468369@gmail.com) created an account",
+      "time": "Just now",
+      "iconType": "customer"
+    },
+    {
+      "id": "act-001",
+      "title": "New lead captured",
+      "description": "Elena Rostova from Apex Dynamics registered via LinkedIn",
+      "time": "25 minutes ago",
+      "iconType": "lead"
+    },
+    {
+      "id": "act-002",
+      "title": "AI Lead scoring completed",
+      "description": "n8n AI evaluated John Smith with score 92 (Hot)",
+      "time": "48 minutes ago",
+      "iconType": "score"
+    },
+    {
+      "id": "act-003",
+      "title": "Customer contract renewed",
+      "description": "DigitalFlow renewed annual contract ($32,800)",
+      "time": "2 hours ago",
+      "iconType": "customer"
+    },
+    {
+      "id": "act-004",
+      "title": "n8n workflow executed",
+      "description": "Hourly CRM synchronization job finished successfully",
+      "time": "3 hours ago",
+      "iconType": "automation"
+    },
+    {
+      "id": "act-005",
+      "title": "Task completed",
+      "description": "Alex Morgan marked DigitalFlow account update done",
+      "time": "5 hours ago",
+      "iconType": "task"
+    }
+  ],
+  "n8nConfig": {
+    "webhookUrl": "https://ali-automation-ai.app.n8n.cloud/webhook/opspilot/new-lead",
+    "webhookSecret": "opspilot-secret-token-xyz99",
+    "autoScoreOnCreate": true,
+    "alertOnHighPriority": true,
+    "lastSyncAt": "2026-09-14T06:16:08.859Z",
+    "totalExecutions": 1842,
+    "successRate": "98.8%"
+  },
+  "users": [
+    {
+      "id": "user-admin-001",
+      "name": "Alex Morgan",
+      "email": "admin@opspilot.dev",
+      "role": "admin",
+      "initials": "AM",
+      "title": "Head of Operations & AI Systems",
+      "organization": "OpsPilot Enterprise",
+      "settings": {
+        "theme": "light",
+        "emailAlerts": true,
+        "n8nWebhookAlerts": true,
+        "highScoreLeadNotification": true,
+        "dailyDigest": true
+      },
+      "passwordHash": "f7e11cc31c6cac0bbd4b94e19a74c2e0abe015e5ed6b93ea7c85c16694f555e457116486535d9abb73a70cebdf591f17243e75e42111d9aa9dd59422ed6ee589",
+      "passwordSalt": "7fc4c39b1168e48fa37ab6200f20ea77"
+    },
+    {
+      "id": "user-mu0unkzl",
+      "name": "Ali Murtaza",
+      "email": "alimurtaza9468369@gmail.com",
+      "role": "user",
+      "initials": "AM",
+      "title": "Operations User",
+      "organization": "OpsPilot",
+      "settings": {
+        "theme": "light",
+        "emailAlerts": true,
+        "n8nWebhookAlerts": true,
+        "highScoreLeadNotification": true,
+        "dailyDigest": true
+      },
+      "passwordHash": "edda7407410355f781b0978c938a8c4cc246bb53cb6c1453a5418f05eb72d913af3abddf1fbff43aec936fd7b28605b9d5e3b0351bd01f645e641827ab2fe7e1",
+      "passwordSalt": "06484a5804220b576096e897a2eb52e4"
+    }
+  ]
+}

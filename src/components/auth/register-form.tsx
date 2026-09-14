@@ -1,35 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { registerAction } from "@/actions/auth.actions";
 
 export function RegisterForm() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 400);
+  const handleSubmit = (formData: FormData) => {
+    setError(null);
+    startTransition(async () => {
+      const result = await registerAction(formData);
+      if (result && !result.success) {
+        setError(result.message || "Could not create account.");
+      }
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
+      {error && (
+        <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-300">
+          {error}
+        </p>
+      )}
+
       <div>
         <label htmlFor="reg-comp-name" className="block text-xs font-semibold text-slate-300">
           Full Name
         </label>
         <input
           id="reg-comp-name"
+          name="name"
           type="text"
           required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Jane Doe"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
@@ -41,10 +45,9 @@ export function RegisterForm() {
         </label>
         <input
           id="reg-comp-email"
+          name="email"
           type="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           placeholder="jane@company.com"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
@@ -56,20 +59,20 @@ export function RegisterForm() {
         </label>
         <input
           id="reg-comp-password"
+          name="password"
           type="password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          minLength={6}
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
       </div>
 
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isPending}
         className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
       >
-        {isLoading ? "Creating account..." : "Get Started with OpsPilot"}
+        {isPending ? "Creating account..." : "Get Started with OpsPilot"}
       </button>
     </form>
   );

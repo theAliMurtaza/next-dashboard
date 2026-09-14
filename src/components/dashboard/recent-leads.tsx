@@ -3,8 +3,8 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import { db } from "@/lib/db";
 import { LeadStatusBadge } from "./lead-status-badge";
 
-export function RecentLeads() {
-  const leads = db.getLeads().slice(0, 5);
+export async function RecentLeads() {
+  const leads = (await db.getLeads()).slice(0, 5);
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">

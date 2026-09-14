@@ -1,35 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { loginAction } from "@/actions/auth.actions";
 
 export function LoginForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState("admin@opspilot.dev");
-  const [password, setPassword] = useState("password123");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 400);
+  const handleSubmit = (formData: FormData) => {
+    setError(null);
+    startTransition(async () => {
+      const result = await loginAction(formData);
+      if (result && !result.success) {
+        setError(result.message || "Could not sign in.");
+      }
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
+      {error && (
+        <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-300">
+          {error}
+        </p>
+      )}
+
       <div>
         <label htmlFor="login-comp-email" className="block text-xs font-semibold text-slate-300">
           Email address
         </label>
         <input
           id="login-comp-email"
+          name="email"
           type="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          defaultValue="admin@opspilot.dev"
           placeholder="admin@opspilot.dev"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
@@ -49,20 +55,20 @@ export function LoginForm() {
         </div>
         <input
           id="login-comp-password"
+          name="password"
           type="password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          defaultValue="password123"
           className="mt-1 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-hidden"
         />
       </div>
 
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isPending}
         className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
       >
-        {isLoading ? "Signing in..." : "Sign In to OpsPilot"}
+        {isPending ? "Signing in..." : "Sign In to OpsPilot"}
       </button>
     </form>
   );

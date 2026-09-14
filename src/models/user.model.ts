@@ -18,6 +18,24 @@ export interface User {
   };
 }
 
+export interface StoredUser extends User {
+  passwordHash: string;
+  passwordSalt: string;
+}
+
+export const DEFAULT_USER_PROFILE: Omit<User, "id" | "name" | "email" | "initials"> = {
+  role: "admin",
+  title: "Operations User",
+  organization: "OpsPilot",
+  settings: {
+    theme: "light",
+    emailAlerts: true,
+    n8nWebhookAlerts: true,
+    highScoreLeadNotification: true,
+    dailyDigest: true,
+  },
+};
+
 export const CURRENT_USER: User = {
   id: "user-admin-001",
   name: "Alex Morgan",
@@ -34,5 +52,20 @@ export const CURRENT_USER: User = {
     dailyDigest: true,
   },
 };
+
+export function initialsFromName(name: string): string {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
+}
+
+export function toPublicUser(user: StoredUser): User {
+  const { passwordHash: _hash, passwordSalt: _salt, ...safe } = user;
+  return safe;
+}
 
 export default CURRENT_USER;

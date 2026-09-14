@@ -1,17 +1,20 @@
+import { db } from "@/lib/db";
+import { getSessionUserId } from "@/lib/session";
 import { CURRENT_USER, User } from "@/models/user.model";
 
-export async function getCurrentUser(): Promise<User> {
-  return CURRENT_USER;
+export async function getCurrentUser(): Promise<User | null> {
+  const userId = await getSessionUserId();
+  if (!userId) return null;
+  return db.getPublicUserById(userId) ?? null;
 }
 
-export function isAuthenticated(): boolean {
-  return true;
+export async function isAuthenticated(): Promise<boolean> {
+  return Boolean(await getCurrentUser());
 }
 
 export const auth = async () => {
-  return {
-    user: CURRENT_USER,
-  };
+  const user = await getCurrentUser();
+  return { user: user ?? CURRENT_USER };
 };
 
 export const signIn = async () => {

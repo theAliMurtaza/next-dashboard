@@ -14,9 +14,11 @@ import { RecentLeads } from "@/components/dashboard/recent-leads";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { db } from "@/lib/db";
 
-export default function DashboardPage() {
-  const stats = db.getStats();
-  const n8nConfig = db.getN8nConfig();
+export default async function DashboardPage() {
+  const [stats, n8nConfig] = await Promise.all([
+    db.getStats(),
+    db.getN8nConfig(),
+  ]);
 
   return (
     <div className="mx-auto max-w-7xl space-y-8">
