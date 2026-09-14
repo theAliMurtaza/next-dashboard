@@ -11,6 +11,13 @@ export interface AuthActionResult {
   message?: string;
 }
 
+function registrationErrorMessage(error: unknown): string {
+  if (error instanceof Error && /MongoDB Atlas cluster|server selection|ECONNREFUSED/i.test(error.message)) {
+    return "We could not reach the database service. Please try again shortly, or contact the workspace administrator.";
+  }
+  return error instanceof Error ? error.message : "Could not create account.";
+}
+
 export async function registerAction(formData: FormData): Promise<AuthActionResult> {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim();
@@ -30,8 +37,7 @@ export async function registerAction(formData: FormData): Promise<AuthActionResu
     const user = await db.createUser({ name, email, password });
     await setSessionCookie(user.id);
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Could not create account.";
-    return { success: false, message };
+    return { success: false, message: registrationErrorMessage(error) };
   }
 
   revalidatePath("/", "layout");

@@ -71,8 +71,12 @@ export async function triggerN8nLeadScoring(
 
     if (response.ok) {
       const data = await response.json();
+      const score = Number(data.score);
+      if (!Number.isFinite(score) || score < 0 || score > 100) {
+        return createLocalFallbackScore(lead, "n8n returned no valid numeric score");
+      }
       return {
-        score: Number(data.score) || 70,
+        score: Math.round(score),
         priority: (data.priority as ScoringResult["priority"]) || "Medium",
         rationale: data.rationale || "Scored by n8n AI workflow.",
       };
@@ -81,16 +85,19 @@ export async function triggerN8nLeadScoring(
     // Webhook not available – use local fallback scoring
   }
 
-  // Local heuristic fallback for development / offline mode
+  return createLocalFallbackScore(lead, "n8n endpoint was unavailable");
+}
+
+function createLocalFallbackScore(lead: Lead, reason: string): ScoringResult {
+  // Development fallback: deliberately varied to make the lead pipeline and
+  // manual re-score control useful when no n8n response is available.
+  // A real numeric score returned by n8n always wins above.
   const value = lead.estimatedValue ?? 10000;
-  const score =
-    Math.min(
-      100,
-      50 +
-        Math.floor(value / 2000) +
-        (lead.source === "Referral" ? 10 : 0) +
-        (lead.notes && lead.notes.length > 50 ? 5 : 0)
-    );
+  const valueSignal = Math.min(12, Math.floor(value / 10_000) * 3);
+  const sourceSignal = lead.source === "Referral" ? 8 : lead.source === "Website" ? 3 : 0;
+  const notesSignal = lead.notes && lead.notes.length > 50 ? 4 : 0;
+  const variation = Math.floor(Math.random() * 41) - 20;
+  const score = Math.max(30, Math.min(98, 62 + valueSignal + sourceSignal + notesSignal + variation));
 
   const priority: ScoringResult["priority"] =
     score >= 90 ? "Critical" : score >= 75 ? "High" : score >= 55 ? "Medium" : "Low";
@@ -98,7 +105,7 @@ export async function triggerN8nLeadScoring(
   return {
     score,
     priority,
-    rationale: `Local heuristic score based on estimated value ($${value.toLocaleString()}) and lead source (${lead.source}).`,
+    rationale: `Local fallback score (${reason}). Generated from lead signals with test variation; it was not supplied by n8n.`,
   };
 }
 
